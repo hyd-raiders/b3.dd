@@ -53,10 +53,12 @@ vim topology.json
 ```bash
 kubectl create ns glusterfs
 ./gk-deploy -g --admin-key adminkey --user-key userkey -y -n glusterfs
+# 这里真心慢
+
 
 #删除gluster集群
 #    ./gk-deploy --abort --admin-key adminkey --user-key userkey -y -n glusterfs
-#kubectl delete ns glusterfs
+#    kubectl delete ns glusterfs
 
 # 需要删除时，下面命令是每个glusterfs集群需做的
 dmsetup ls
@@ -71,11 +73,38 @@ dd if=/dev/zero of=/dev/sdb bs=512k count=1   # 这里的/dev/sdb是要写你配
 
 
 
+### hekeki
+
+```bash
+cd /data/temp
+wget https://github.com/heketi/heketi/releases/download/v9.0.0/heketi-client-v9.0.0.linux.amd64.tar.gz
+tar xvzf heketi-client-v9.0.0.linux.amd64.tar.gz
+
+# 其他方式也可以
+ln -s /data/temp/heketi-client/bin/heketi-cli /usr/bin/heketi-cli	
+
+export HEKETI_CLI_SERVER=http://$( kubectl get svc heketi -n glusterfs -o go-template='{{.spec.clusterIP}}'):8080
+
+heketi-cli --user admin --secret adminkey topology info
+
+heketi-cli --user admin --secret adminkey volume list
+
+heketi-cli --user admin --secret adminkey volume info 
+```
 
 
 
+### pc
+
+```bash
+heketi-cli volume create  --user admin --secret adminkey --size=5 \
+   --persistent-volume \
+   --persistent-volume-endpoint=heketi-storage-endpoints >heketi-storage-endpoints.yaml
+```
 
 
+
+### busybox 测试下磁盘
 
 ```bash
 # start busybox @ glusterfs

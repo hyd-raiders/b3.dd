@@ -16,4 +16,7 @@ nfs todo
 
 #### 启动kafka
 
-​	
+kafka在k8s中启动，不建议使用分布式pv或者nfs等，采用local pv方式
+
+
+
