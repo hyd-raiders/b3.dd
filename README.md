@@ -8,7 +8,9 @@ data driven
 
 ![](./docs/dd.png)
 
+### 详细设计
 
+[设计](./detailDesign/main.md)
 
 ## just do it 
 
