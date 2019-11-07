@@ -10,7 +10,9 @@ data driven
 
 
 
-## just do it
+## just do it 
+
+[从零开始](./fromZero.md) 做dd
 
 1. bury first
 
